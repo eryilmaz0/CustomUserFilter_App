@@ -47,16 +47,16 @@ public class ProductsController : Controller
         if (customFilterGroup is null)
             return BadRequest("Filter Group Not Found.");
 
-        var products =  _context.Products.AsEnumerable();
-        // IEnumerable<Product> products = new List<Product>(request.Products);
-        List<CustomFilterBase> filters = this._factory.GetCustomFilters(customFilterGroup.Filters).ToList();
-        
-        filters.ForEach(filter =>
-        {
-            products = filter.Filter(products);
-        });
+        IQueryable<Product> products =  _context.Products.AsQueryable();
+        ICollection<CustomFilterBase> filters = this._factory.GetCustomFilters(customFilterGroup.Filters);
 
-        return Ok(products.ToList());
+        foreach (var filter in filters)
+        {
+            products = filter.FilterByQueryable(products);
+        }
+        
+        var productList =  products.AsQueryable().ToList();
+        return Ok(productList);
 
 
 

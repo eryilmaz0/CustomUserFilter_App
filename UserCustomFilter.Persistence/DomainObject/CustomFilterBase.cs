@@ -11,5 +11,6 @@ public abstract class CustomFilterBase
     public string SecondFilterValue { get; set; }
     public DateTime Created { get; set; }
 
-    public abstract IEnumerable<Product> Filter(IEnumerable<Product> products);
+    public abstract IEnumerable<Product> FilterByEnumerable(IEnumerable<Product> products);
+    public abstract IQueryable<Product> FilterByQueryable(IQueryable<Product> products);
 }
